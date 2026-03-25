@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: invoice-app
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: DB_PATH
+        value: /data/users.db
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GMAIL_USER
+        value: roiaharon456@gmail.com
+      - key: GMAIL_APP_PASSWORD
+        sync: false
+      - key: RECIPIENT_EMAIL
+        value: roiaharon456@gmail.com
