@@ -3,8 +3,33 @@ import base64
 import os
 import json
 import logging
+from io import BytesIO
 
 logger = logging.getLogger(__name__)
+
+
+def convert_to_jpeg(image_bytes: bytes, content_type: str) -> tuple[bytes, str]:
+    """ממיר כל תמונה ל-JPEG כדי שGemini יוכל לקרוא אותה"""
+    try:
+        from PIL import Image
+        try:
+            from pillow_heif import register_heif_opener
+            register_heif_opener()
+        except Exception:
+            pass
+
+        img = Image.open(BytesIO(image_bytes))
+        if img.mode in ("RGBA", "P", "LA"):
+            img = img.convert("RGB")
+
+        output = BytesIO()
+        img.save(output, format="JPEG", quality=90)
+        return output.getvalue(), "image/jpeg"
+    except Exception as e:
+        logger.warning(f"Image conversion failed: {e}, using original")
+        supported = ["image/jpeg", "image/png", "image/gif", "image/webp"]
+        mime = content_type if content_type in supported else "image/jpeg"
+        return image_bytes, mime
 
 
 async def extract_invoice_details(image_bytes: bytes, content_type: str) -> dict:
@@ -15,11 +40,9 @@ async def extract_invoice_details(image_bytes: bytes, content_type: str) -> dict
 
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
 
-    mime_type = content_type if content_type in [
-        "image/jpeg", "image/png", "image/gif", "image/webp"
-    ] else "image/jpeg"
-
-    image_b64 = base64.b64encode(image_bytes).decode("utf-8")
+    # המרת התמונה ל-JPEG
+    converted_bytes, mime_type = convert_to_jpeg(image_bytes, content_type)
+    image_b64 = base64.b64encode(converted_bytes).decode("utf-8")
 
     prompt = """אתה עוזר לחלץ פרטים מחשבוניות.
 חלץ את הפרטים הבאים מהחשבונית ותחזיר JSON בלבד (ללא טקסט נוסף):

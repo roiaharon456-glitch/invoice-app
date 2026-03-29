@@ -16,15 +16,15 @@ async def send_email(user: dict, details: dict, invoice_bytes: bytes, filename: 
       <meta charset="UTF-8">
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <style>
-        body {{ font-family: Arial, sans-serif; direction: rtl; text-align: right; color: #333; unicode-bidi: embed; }}
-        h2 {{ color: #2c5282; border-bottom: 2px solid #2c5282; padding-bottom: 8px; }}
-        p {{ direction: rtl; text-align: right; }}
-        table {{ border-collapse: collapse; width: 100%; max-width: 500px; direction: rtl; }}
-        th, td {{ border: 1px solid #ddd; padding: 10px 14px; text-align: right; }}
+        body {{ font-family: Arial, sans-serif; direction: rtl; text-align: right; color: #333; unicode-bidi: embed; font-size: 16px; line-height: 1.6; }}
+        h2 {{ color: #2c5282; border-bottom: 2px solid #2c5282; padding-bottom: 8px; font-size: 20px; }}
+        p {{ direction: rtl; text-align: right; font-size: 16px; }}
+        table {{ border-collapse: collapse; width: 100%; max-width: 560px; direction: rtl; font-size: 15px; }}
+        th, td {{ border: 1px solid #ddd; padding: 12px 16px; text-align: right; }}
         th {{ background-color: #ebf4ff; color: #2c5282; font-weight: bold; width: 40%; }}
         td {{ background-color: #f9f9f9; }}
-        .section-title {{ margin-top: 24px; margin-bottom: 8px; font-weight: bold; color: #555; font-size: 14px; }}
-        .greeting {{ background: #f0f7ff; border-right: 4px solid #2c5282; padding: 14px 16px; margin-bottom: 24px; border-radius: 4px; direction: rtl; text-align: right; }}
+        .section-title {{ margin-top: 24px; margin-bottom: 8px; font-weight: bold; color: #555; font-size: 15px; }}
+        .greeting {{ background: #f0f7ff; border-right: 4px solid #2c5282; padding: 16px 18px; margin-bottom: 24px; border-radius: 4px; direction: rtl; text-align: right; font-size: 16px; line-height: 1.8; }}
       </style>
     </head>
     <body>
