@@ -10,54 +10,50 @@ async def send_email(user: dict, details: dict, invoice_bytes: bytes, filename: 
     amount = details.get('amount', 'לא זוהה')
     reason_text = expense_reason if expense_reason else "הוצאה"
 
-    html_body = f"""
-    <html dir="rtl" lang="he">
-    <head>
-      <meta charset="UTF-8">
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <style>
-        body {{ font-family: Arial, sans-serif; direction: rtl; text-align: right; color: #333; unicode-bidi: embed; font-size: 16px; line-height: 1.6; }}
-        h2 {{ color: #2c5282; border-bottom: 2px solid #2c5282; padding-bottom: 8px; font-size: 20px; }}
-        p {{ direction: rtl; text-align: right; font-size: 16px; }}
-        table {{ border-collapse: collapse; width: 100%; max-width: 560px; direction: rtl; font-size: 15px; }}
-        th, td {{ border: 1px solid #ddd; padding: 12px 16px; text-align: right; }}
-        th {{ background-color: #ebf4ff; color: #2c5282; font-weight: bold; width: 40%; }}
-        td {{ background-color: #f9f9f9; }}
-        .section-title {{ margin-top: 24px; margin-bottom: 8px; font-weight: bold; color: #555; font-size: 15px; }}
-        .greeting {{ background: #f0f7ff; border-right: 4px solid #2c5282; padding: 16px 18px; margin-bottom: 24px; border-radius: 4px; direction: rtl; text-align: right; font-size: 16px; line-height: 1.8; }}
-      </style>
-    </head>
-    <body>
-      <h2>בקשת החזר הוצאה</h2>
+    html_body = f"""<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body style="margin:0;padding:20px;font-family:Arial,sans-serif;direction:rtl;text-align:right;color:#333;font-size:12pt;line-height:1.7;background:#f5f7fa;">
+  <div style="max-width:580px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
 
-      <div class="greeting">
+    <div style="background:#2c5282;padding:20px 24px;">
+      <h2 style="margin:0;color:#fff;font-size:16pt;direction:rtl;text-align:right;">בקשת החזר הוצאה</h2>
+    </div>
+
+    <div style="padding:24px;">
+
+      <div style="background:#f0f7ff;border-right:4px solid #2c5282;padding:16px 18px;margin-bottom:24px;border-radius:4px;direction:rtl;text-align:right;font-size:12pt;line-height:1.9;">
         היי,<br><br>
         מצורפת חשבונית לזיכוי בגין <strong>{reason_text}</strong>, על סך: <strong>{amount}</strong>.<br>
         להלן פרטי המוטב לביצוע ההעברה.
       </div>
 
-      <p class="section-title">פרטי מגיש הבקשה</p>
-      <table>
-        <tr><th>שם</th><td>{user['name']}</td></tr>
-        <tr><th>שם בעל החשבון</th><td>{user['account_holder']}</td></tr>
-        <tr><th>בנק</th><td>{user['bank_name']}</td></tr>
-        <tr><th>מספר בנק</th><td>{user['bank_number']}</td></tr>
-        <tr><th>מספר סניף</th><td>{user['branch_number']}</td></tr>
-        <tr><th>מספר חשבון</th><td>{user['account_number']}</td></tr>
+      <p style="margin:0 0 8px 0;font-weight:bold;color:#555;font-size:12pt;direction:rtl;text-align:right;">פרטי מגיש הבקשה</p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;direction:rtl;font-size:12pt;margin-bottom:20px;">
+        <tr><td style="border:1px solid #ddd;padding:10px 14px;background:#ebf4ff;color:#2c5282;font-weight:bold;width:40%;text-align:right;">שם</td><td style="border:1px solid #ddd;padding:10px 14px;background:#f9f9f9;text-align:right;">{user['name']}</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:10px 14px;background:#ebf4ff;color:#2c5282;font-weight:bold;text-align:right;">שם בעל החשבון</td><td style="border:1px solid #ddd;padding:10px 14px;background:#f9f9f9;text-align:right;">{user['account_holder']}</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:10px 14px;background:#ebf4ff;color:#2c5282;font-weight:bold;text-align:right;">בנק</td><td style="border:1px solid #ddd;padding:10px 14px;background:#f9f9f9;text-align:right;">{user['bank_name']}</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:10px 14px;background:#ebf4ff;color:#2c5282;font-weight:bold;text-align:right;">מספר בנק</td><td style="border:1px solid #ddd;padding:10px 14px;background:#f9f9f9;text-align:right;">{user['bank_number']}</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:10px 14px;background:#ebf4ff;color:#2c5282;font-weight:bold;text-align:right;">מספר סניף</td><td style="border:1px solid #ddd;padding:10px 14px;background:#f9f9f9;text-align:right;">{user['branch_number']}</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:10px 14px;background:#ebf4ff;color:#2c5282;font-weight:bold;text-align:right;">מספר חשבון</td><td style="border:1px solid #ddd;padding:10px 14px;background:#f9f9f9;text-align:right;">{user['account_number']}</td></tr>
       </table>
 
-      <p class="section-title">פרטי החשבונית</p>
-      <table>
-        <tr><th>ספק</th><td>{details.get('supplier', 'לא זוהה')}</td></tr>
-        <tr><th>סכום</th><td><strong>{details.get('amount', 'לא זוהה')}</strong></td></tr>
-        <tr><th>תאריך</th><td>{details.get('date', 'לא זוהה')}</td></tr>
-        <tr><th>תיאור</th><td>{details.get('description', 'לא זוהה')}</td></tr>
+      <p style="margin:0 0 8px 0;font-weight:bold;color:#555;font-size:12pt;direction:rtl;text-align:right;">פרטי החשבונית</p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;direction:rtl;font-size:12pt;margin-bottom:20px;">
+        <tr><td style="border:1px solid #ddd;padding:10px 14px;background:#ebf4ff;color:#2c5282;font-weight:bold;width:40%;text-align:right;">ספק</td><td style="border:1px solid #ddd;padding:10px 14px;background:#f9f9f9;text-align:right;">{details.get('supplier', 'לא זוהה')}</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:10px 14px;background:#ebf4ff;color:#2c5282;font-weight:bold;text-align:right;">סכום</td><td style="border:1px solid #ddd;padding:10px 14px;background:#f9f9f9;text-align:right;"><strong>{details.get('amount', 'לא זוהה')}</strong></td></tr>
+        <tr><td style="border:1px solid #ddd;padding:10px 14px;background:#ebf4ff;color:#2c5282;font-weight:bold;text-align:right;">תאריך</td><td style="border:1px solid #ddd;padding:10px 14px;background:#f9f9f9;text-align:right;">{details.get('date', 'לא זוהה')}</td></tr>
+        <tr><td style="border:1px solid #ddd;padding:10px 14px;background:#ebf4ff;color:#2c5282;font-weight:bold;text-align:right;">תיאור</td><td style="border:1px solid #ddd;padding:10px 14px;background:#f9f9f9;text-align:right;">{details.get('description', 'לא זוהה')}</td></tr>
       </table>
 
-      <p style="margin-top: 24px; font-size: 12px; color: #888;">החשבונית המקורית מצורפת למייל זה.</p>
-    </body>
-    </html>
-    """
+      <p style="margin-top:16px;font-size:10pt;color:#999;direction:rtl;text-align:right;">החשבונית המקורית מצורפת למייל זה.</p>
+    </div>
+  </div>
+</body>
+</html>"""
 
     safe_filename = filename.encode("ascii", "ignore").decode() or "invoice.jpg"
     attachment_content = base64.b64encode(invoice_bytes).decode("utf-8")
