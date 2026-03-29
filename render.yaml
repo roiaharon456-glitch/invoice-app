@@ -9,9 +9,7 @@ services:
         value: /tmp/users.db
       - key: GEMINI_API_KEY
         sync: false
-      - key: GMAIL_USER
-        value: roiaharon456@gmail.com
-      - key: GMAIL_APP_PASSWORD
+      - key: RESEND_API_KEY
         sync: false
       - key: RECIPIENT_EMAIL
         value: roiaharon456@gmail.com

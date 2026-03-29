@@ -1,21 +1,12 @@
-import smtplib
+import httpx
+import base64
 import os
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
 
-GMAIL_USER = os.getenv("GMAIL_USER", "roiaharon456@gmail.com")
-GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")
+RESEND_API_KEY = os.getenv("RESEND_API_KEY")
 RECIPIENT_EMAIL = os.getenv("RECIPIENT_EMAIL", "roiaharon456@gmail.com")
 
 
 async def send_email(user: dict, details: dict, invoice_bytes: bytes, filename: str, content_type: str):
-    msg = MIMEMultipart()
-    msg["From"] = GMAIL_USER
-    msg["To"] = RECIPIENT_EMAIL
-    msg["Subject"] = f"בקשת החזר | {user['name']} | {details.get('supplier', '')} | {details.get('amount', '')}"
-
     html_body = f"""
     <html dir="rtl">
     <head>
@@ -56,15 +47,31 @@ async def send_email(user: dict, details: dict, invoice_bytes: bytes, filename: 
     </html>
     """
 
-    msg.attach(MIMEText(html_body, "html", "utf-8"))
-
-    part = MIMEBase("application", "octet-stream")
-    part.set_payload(invoice_bytes)
-    encoders.encode_base64(part)
     safe_filename = filename.encode("ascii", "ignore").decode() or "invoice.jpg"
-    part.add_header("Content-Disposition", f'attachment; filename="{safe_filename}"')
-    msg.attach(part)
+    attachment_content = base64.b64encode(invoice_bytes).decode("utf-8")
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(GMAIL_USER, GMAIL_APP_PASSWORD)
-        server.sendmail(GMAIL_USER, RECIPIENT_EMAIL, msg.as_string())
+    subject = f"בקשת החזר | {user['name']} | {details.get('supplier', '')} | {details.get('amount', '')}"
+
+    payload = {
+        "from": "מערכת החזר הוצאות <onboarding@resend.dev>",
+        "to": [RECIPIENT_EMAIL],
+        "subject": subject,
+        "html": html_body,
+        "attachments": [
+            {
+                "filename": safe_filename,
+                "content": attachment_content
+            }
+        ]
+    }
+
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        response = await client.post(
+            "https://api.resend.com/emails",
+            headers={
+                "Authorization": f"Bearer {RESEND_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json=payload
+        )
+        response.raise_for_status()
