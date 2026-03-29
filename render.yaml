@@ -4,13 +4,9 @@ services:
     runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
-    disk:
-      name: data
-      mountPath: /data
-      sizeGB: 1
     envVars:
       - key: DB_PATH
-        value: /data/users.db
+        value: /tmp/users.db
       - key: GEMINI_API_KEY
         sync: false
       - key: GMAIL_USER

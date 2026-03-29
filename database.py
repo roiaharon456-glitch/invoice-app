@@ -1,12 +1,14 @@
 import sqlite3
 import os
 
-DB_PATH = os.getenv("DB_PATH", "data/users.db")
+DB_PATH = os.getenv("DB_PATH", "/tmp/users.db")
 
 
 class Database:
     def __init__(self):
-        os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+        db_dir = os.path.dirname(DB_PATH)
+        if db_dir:
+            os.makedirs(db_dir, exist_ok=True)
         self._init_db()
 
     def _get_conn(self):
