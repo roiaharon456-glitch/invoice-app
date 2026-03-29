@@ -2,12 +2,19 @@ import httpx
 import base64
 import os
 import json
+import logging
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+logger = logging.getLogger(__name__)
 
 
 async def extract_invoice_details(image_bytes: bytes, content_type: str) -> dict:
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        logger.error("GEMINI_API_KEY is not set!")
+        return {"supplier": "לא זוהה", "amount": "לא זוהה", "date": "לא זוהה", "description": "לא זוהה"}
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+
     mime_type = content_type if content_type in [
         "image/jpeg", "image/png", "image/gif", "image/webp"
     ] else "image/jpeg"
@@ -28,12 +35,7 @@ async def extract_invoice_details(image_bytes: bytes, content_type: str) -> dict
         "contents": [
             {
                 "parts": [
-                    {
-                        "inline_data": {
-                            "mime_type": mime_type,
-                            "data": image_b64
-                        }
-                    },
+                    {"inline_data": {"mime_type": mime_type, "data": image_b64}},
                     {"text": prompt}
                 ]
             }
@@ -41,11 +43,16 @@ async def extract_invoice_details(image_bytes: bytes, content_type: str) -> dict
     }
 
     try:
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            response = await client.post(GEMINI_URL, json=payload)
-            response.raise_for_status()
+        async with httpx.AsyncClient(timeout=45.0) as client:
+            response = await client.post(url, json=payload)
+            logger.info(f"Gemini status: {response.status_code}")
+            if response.status_code != 200:
+                logger.error(f"Gemini error: {response.text}")
+                return {"supplier": "לא זוהה", "amount": "לא זוהה", "date": "לא זוהה", "description": "לא זוהה"}
+
             data = response.json()
             text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
+            logger.info(f"Gemini response: {text[:200]}")
 
             if "```" in text:
                 text = text.split("```")[1]
@@ -53,10 +60,7 @@ async def extract_invoice_details(image_bytes: bytes, content_type: str) -> dict
                     text = text[4:]
 
             return json.loads(text.strip())
-    except Exception:
-        return {
-            "supplier": "לא זוהה",
-            "amount": "לא זוהה",
-            "date": "לא זוהה",
-            "description": "לא זוהה",
-        }
+
+    except Exception as e:
+        logger.error(f"Invoice extraction error: {e}")
+        return {"supplier": "לא זוהה", "amount": "לא זוהה", "date": "לא זוהה", "description": "לא זוהה"}
