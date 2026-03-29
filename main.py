@@ -27,6 +27,7 @@ async def submit(
     account_number: str = Form(None),
     account_holder: str = Form(None),
     invoice: UploadFile = File(...),
+    expense_reason: str = Form(""),
 ):
     user = db.get_user(name)
 
@@ -41,7 +42,7 @@ async def submit(
     filename = invoice.filename or "invoice.jpg"
 
     details = await extract_invoice_details(invoice_bytes, content_type)
-    await send_email(user, details, invoice_bytes, filename, content_type)
+    await send_email(user, details, invoice_bytes, filename, content_type, expense_reason)
 
     return {"success": True, "message": "הבקשה נשלחה בהצלחה!"}
 

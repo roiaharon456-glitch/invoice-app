@@ -139,6 +139,7 @@ function previewImage(event) {
     document.getElementById('upload-content').style.display = 'none';
     document.getElementById('submit-btn').disabled = false;
     document.getElementById('btn-change').style.display = 'flex';
+    document.getElementById('reason-field').style.display = 'block';
   };
   reader.readAsDataURL(file);
 }
@@ -149,6 +150,8 @@ function clearImage() {
   document.getElementById('upload-content').style.display = 'flex';
   document.getElementById('submit-btn').disabled = true;
   document.getElementById('btn-change').style.display = 'none';
+  document.getElementById('reason-field').style.display = 'none';
+  document.getElementById('expense_reason').value = '';
 }
 
 /* ── Submit ── */
@@ -156,9 +159,13 @@ async function submitForm() {
   const fileInput = document.getElementById('invoice-input');
   if (!fileInput.files[0]) { showError('אנא העלה תמונת חשבונית'); return; }
 
+  const expenseReason = document.getElementById('expense_reason').value.trim();
+  if (!expenseReason) { showError('אנא הכנס סיבת הוצאה'); return; }
+
   const form = new FormData();
   form.append('name', currentUser.name);
   form.append('invoice', fileInput.files[0]);
+  form.append('expense_reason', expenseReason);
 
   const isNew = !currentUser.id;
   if (isNew) {
