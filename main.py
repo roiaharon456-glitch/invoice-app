@@ -1,10 +1,8 @@
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import JSONResponse
 import os
 from database import Database
 from email_sender import send_email
-from invoice_extractor import extract_invoice_details
 
 app = FastAPI()
 db = Database()
@@ -28,6 +26,7 @@ async def submit(
     account_holder: str = Form(None),
     invoice: UploadFile = File(...),
     expense_reason: str = Form(""),
+    expense_amount: str = Form(""),
 ):
     user = db.get_user(name)
 
@@ -38,11 +37,10 @@ async def submit(
         user = db.get_user(name)
 
     invoice_bytes = await invoice.read()
-    content_type = invoice.content_type or "image/jpeg"
     filename = invoice.filename or "invoice.jpg"
+    content_type = invoice.content_type or "image/jpeg"
 
-    details = await extract_invoice_details(invoice_bytes, content_type)
-    await send_email(user, details, invoice_bytes, filename, content_type, expense_reason)
+    await send_email(user, invoice_bytes, filename, content_type, expense_reason, expense_amount)
 
     return {"success": True, "message": "הבקשה נשלחה בהצלחה!"}
 

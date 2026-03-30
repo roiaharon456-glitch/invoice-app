@@ -139,7 +139,7 @@ function previewImage(event) {
     document.getElementById('upload-content').style.display = 'none';
     document.getElementById('submit-btn').disabled = false;
     document.getElementById('btn-change').style.display = 'flex';
-    document.getElementById('reason-field').style.display = 'block';
+    document.getElementById('extra-fields').style.display = 'block';
   };
   reader.readAsDataURL(file);
 }
@@ -150,8 +150,9 @@ function clearImage() {
   document.getElementById('upload-content').style.display = 'flex';
   document.getElementById('submit-btn').disabled = true;
   document.getElementById('btn-change').style.display = 'none';
-  document.getElementById('reason-field').style.display = 'none';
+  document.getElementById('extra-fields').style.display = 'none';
   document.getElementById('expense_reason').value = '';
+  document.getElementById('expense_amount').value = '';
 }
 
 /* ── Submit ── */
@@ -162,10 +163,14 @@ async function submitForm() {
   const expenseReason = document.getElementById('expense_reason').value.trim();
   if (!expenseReason) { showError('אנא הכנס סיבת הוצאה'); return; }
 
+  const expenseAmount = document.getElementById('expense_amount').value.trim();
+  if (!expenseAmount) { showError('אנא הכנס סכום החשבונית'); return; }
+
   const form = new FormData();
   form.append('name', currentUser.name);
   form.append('invoice', fileInput.files[0]);
   form.append('expense_reason', expenseReason);
+  form.append('expense_amount', expenseAmount);
 
   const isNew = !currentUser.id;
   if (isNew) {

@@ -219,10 +219,18 @@
             החלף תמונה
           </button>
 
-          <div class="field-group" id="reason-field" style="display:none; margin-top: 16px;">
-            <label for="expense_reason">סיבת ההוצאה</label>
-            <div class="input-wrap">
-              <input type="text" id="expense_reason" placeholder="לדוגמה: ציוד משרדי, נסיעה לכנס..." required />
+          <div id="extra-fields" style="display:none; margin-top: 16px;">
+            <div class="field-group" style="margin-bottom: 12px;">
+              <label for="expense_reason">סיבת ההוצאה *</label>
+              <div class="input-wrap">
+                <input type="text" id="expense_reason" placeholder="לדוגמה: ציוד משרדי, נסיעה לכנס..." required />
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="expense_amount">סכום החשבונית *</label>
+              <div class="input-wrap">
+                <input type="text" id="expense_amount" placeholder="לדוגמה: 150.00 ₪" required />
+              </div>
             </div>
           </div>
 
