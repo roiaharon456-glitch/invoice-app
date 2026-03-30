@@ -7,7 +7,8 @@ RECIPIENT_EMAIL = os.getenv("RECIPIENT_EMAIL", "roiaharon456@gmail.com")
 
 
 async def send_email(user: dict, invoice_bytes: bytes, filename: str, content_type: str, expense_reason: str = "", expense_amount: str = ""):
-    amount = expense_amount if expense_amount else "לא צוין"
+    raw_amount = expense_amount if expense_amount else "לא צוין"
+    amount = f"{raw_amount} ₪" if expense_amount else raw_amount
     reason_text = expense_reason if expense_reason else "הוצאה"
 
     html_body = f"""<!DOCTYPE html>
@@ -50,7 +51,7 @@ async def send_email(user: dict, invoice_bytes: bytes, filename: str, content_ty
     safe_filename = filename.encode("ascii", "ignore").decode() or "invoice.jpg"
     attachment_content = base64.b64encode(invoice_bytes).decode("utf-8")
 
-    subject = f"בקשת החזר | {user['name']} | {reason_text} | {amount}"
+    subject = f"{user['name']} | קהילת אלה מערבית"
 
     payload = {
         "from": "מערכת החזר הוצאות <onboarding@resend.dev>",
