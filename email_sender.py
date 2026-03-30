@@ -50,7 +50,7 @@ async def send_email(user: dict, invoice_bytes: bytes, filename: str, content_ty
     safe_filename = filename.encode("ascii", "ignore").decode() or "invoice.jpg"
     attachment_content = base64.b64encode(invoice_bytes).decode("utf-8")
 
-    subject = f"בקשת החזר | {user['name']} | {details.get('supplier', '')} | {details.get('amount', '')}"
+    subject = f"בקשת החזר | {user['name']} | {reason_text} | {amount}"
 
     payload = {
         "from": "מערכת החזר הוצאות <onboarding@resend.dev>",
