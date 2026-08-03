@@ -2,3 +2,5 @@
 data/
 __pycache__/
 *.pyc
+scripts/video_demo/.venv/
+scripts/video_demo/output/
