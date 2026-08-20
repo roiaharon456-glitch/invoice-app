@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>קופת צדקה</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background blobs -->
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+
+  <div class="page-wrapper">
+
+    <!-- Header -->
+    <header class="site-header">
+      <div class="header-logo">
+        <div class="logo-icon">🪙</div>
+        <span class="logo-text">קופת הצדקה שלי</span>
+      </div>
+    </header>
+
+    <!-- Main card -->
+    <main class="charity-card">
+
+      <!-- Running total -->
+      <div class="total-block">
+        <span class="total-label">כמה צברת עד עכשיו</span>
+        <div class="total-amount" id="total-amount">₪0.00</div>
+      </div>
+
+      <!-- Mode toggle -->
+      <div class="mode-toggle" role="group" aria-label="מצב הטלת מטבעות">
+        <button type="button" class="mode-btn active" id="mode-single" data-mode="single">מטבע אחד</button>
+        <button type="button" class="mode-btn" id="mode-double" data-mode="double">2 מטבעות</button>
+      </div>
+
+      <!-- Hint (double mode only) -->
+      <div class="hint-row">
+        <span id="hint-text" aria-live="polite"></span>
+      </div>
+
+      <!-- Coin picker -->
+      <div class="coin-row" id="coin-row">
+        <button type="button" class="coin coin--10ag" data-coin="10ag" data-value="10" aria-label="הוסף 10 אגורות">
+          <span class="coin-face">
+            <span class="coin-shine"></span>
+            <span class="coin-value">10</span>
+          </span>
+          <span class="coin-label">10 אג׳</span>
+        </button>
+
+        <button type="button" class="coin coin--half" data-coin="half" data-value="50" aria-label="הוסף חצי שקל">
+          <span class="coin-face">
+            <span class="coin-shine"></span>
+            <span class="coin-value">½</span>
+          </span>
+          <span class="coin-label">חצי שקל</span>
+        </button>
+
+        <button type="button" class="coin coin--1nis" data-coin="1nis" data-value="100" aria-label="הוסף שקל אחד">
+          <span class="coin-face">
+            <span class="coin-shine"></span>
+            <span class="coin-value">1</span>
+          </span>
+          <span class="coin-label">1 ש״ח</span>
+        </button>
+
+        <button type="button" class="coin coin--2nis" data-coin="2nis" data-value="200" aria-label="הוסף שני שקלים">
+          <span class="coin-face coin-face--bimetal">
+            <span class="coin-inner-circle">
+              <span class="coin-shine"></span>
+              <span class="coin-value">2</span>
+            </span>
+          </span>
+          <span class="coin-label">2 ש״ח</span>
+        </button>
+      </div>
+
+      <!-- Empty box -->
+      <button type="button" class="btn-empty" id="empty-btn" disabled>רוקן את הקופה</button>
+    </main>
+
+    <footer class="site-footer">קופה וירטואלית — הכסף האמיתי מחכה בקופה הפיזית שלך 🙏</footer>
+  </div>
+
+  <!-- Empty-box confirmation modal -->
+  <div class="modal-overlay" id="modal-overlay" hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button type="button" class="modal-close" id="modal-close" aria-label="סגירה">✕</button>
+
+      <div class="modal-view active" id="panel-confirm">
+        <div class="modal-icon modal-icon--warn">⚠️</div>
+        <h2 id="modal-title">לרוקן את הקופה?</h2>
+        <p id="confirm-text">בקופה כרגע ₪0.00. הפעולה תאפס את הסכום לחלוטין.</p>
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" id="cancel-empty-btn">ביטול</button>
+          <button type="button" class="btn-danger" id="confirm-empty-btn">כן, רוקן</button>
+        </div>
+      </div>
+
+      <div class="modal-view" id="panel-result">
+        <div class="modal-icon modal-icon--success">✓</div>
+        <h2 id="result-title">תרמת ₪0.00!</h2>
+        <p>הקופה התרוקנה. אל תשכח/י לתרום את הסכום הזה בפועל 🙏</p>
+        <div class="modal-actions">
+          <button type="button" class="btn-primary-modal" id="done-btn">הבנתי</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
