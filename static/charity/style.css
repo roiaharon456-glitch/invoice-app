@@ -113,85 +113,30 @@ button { font-family: inherit; }
   align-items: center;
 }
 
-/* ── Total display ── */
-.total-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 22px;
-}
-.total-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--gray-400);
-}
-.total-amount {
-  font-size: 46px;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--amber) 0%, var(--gold) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  transition: transform 0.15s ease;
-  font-variant-numeric: tabular-nums;
-}
-.total-amount.bump { animation: bump 0.35s ease; }
-@keyframes bump {
-  0%   { transform: scale(1); }
-  35%  { transform: scale(1.12); }
-  100% { transform: scale(1); }
-}
-
-/* ── Mode toggle ── */
-.mode-toggle {
-  display: flex;
-  width: 100%;
-  background: var(--gray-100);
-  border-radius: 40px;
-  padding: 4px;
-  gap: 4px;
-  margin-bottom: 6px;
-}
-.mode-btn {
-  flex: 1;
-  padding: 11px 12px;
-  border: none;
-  border-radius: 32px;
-  background: transparent;
-  color: var(--gray-600);
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-}
-.mode-btn.active {
-  background: linear-gradient(135deg, var(--amber) 0%, var(--gold) 100%);
-  color: white;
-  box-shadow: 0 4px 14px rgba(217,119,6,0.35);
-}
-
-/* ── Hint row ── */
-.hint-row {
-  min-height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* ── Charity affiliation line ── */
+.charity-line {
   font-size: 13px;
   font-weight: 600;
   color: var(--amber-dark);
-  margin-bottom: 4px;
+  text-align: center;
+  margin-bottom: 18px;
+  background: rgba(217,119,6,.08);
+  border: 1px solid rgba(217,119,6,.2);
+  border-radius: 40px;
+  padding: 7px 16px;
 }
+.charity-line[hidden] { display: none; }
+.charity-line strong { color: var(--gray-800); }
 
-/* ── Coin row ── */
-.coin-row {
-  display: flex;
+/* ── Coin grid ── */
+.coin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
   justify-content: center;
-  align-items: flex-end;
-  flex-wrap: wrap;
-  gap: 18px;
+  align-items: end;
+  gap: 22px 30px;
   width: 100%;
-  padding: 14px 0 8px;
+  padding: 4px 0 22px;
 }
 
 .coin {
@@ -322,28 +267,6 @@ button { font-family: inherit; }
 .coin:hover .coin-face { transform: scale(1.05); }
 .coin:active .coin-face { transform: scale(0.95); }
 
-.coin.selected .coin-face {
-  transform: translateY(-4px) scale(1.08);
-}
-
-/* Selection ring — a plain circle behind the face, unaffected by the
-   face's own clip-path (a ring following the scalloped/hendecagon
-   outline exactly would get clipped away along with it). */
-.coin.selected::before {
-  content: '';
-  position: absolute;
-  top: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  border: 3px solid var(--amber);
-  pointer-events: none;
-}
-.coin--10ag.selected::before { width: 60px; height: 60px; }
-.coin--1nis.selected::before { width: 66px; height: 66px; }
-.coin--half.selected::before { width: 74px; height: 74px; }
-.coin--2nis.selected::before { width: 78px; height: 78px; }
-
 .coin.drop .coin-face { animation: coinDrop 0.4s ease; }
 @keyframes coinDrop {
   0%   { transform: scale(1); }
@@ -371,11 +294,56 @@ button { font-family: inherit; }
   100% { opacity: 0; transform: translate(-50%, -28px); }
 }
 
-/* ── Empty button ── */
-.btn-empty {
-  margin-top: 22px;
+/* ── Stat boxes (today / cumulative) ── */
+.stat-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
   width: 100%;
-  padding: 13px 20px;
+}
+.stat-block + .stat-block { margin-top: 14px; }
+.stat-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-400);
+}
+.stat-box {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--gray-50);
+  border: 1.5px solid var(--gray-200);
+  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--gray-800);
+  font-variant-numeric: tabular-nums;
+  transition: transform 0.15s ease;
+}
+.stat-box.bump { animation: bump 0.35s ease; }
+@keyframes bump {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+.stat-box--accent {
+  background: linear-gradient(135deg, rgba(217,119,6,.10), rgba(234,179,8,.10));
+  border-color: rgba(217,119,6,.3);
+  color: var(--amber-dark);
+  font-size: 30px;
+}
+
+/* ── Actions ── */
+.btn-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  margin-top: 24px;
+}
+.btn-empty {
+  padding: 13px 16px;
   background: var(--gray-50);
   border: 1.5px solid var(--gray-200);
   border-radius: var(--radius-sm);
@@ -391,6 +359,21 @@ button { font-family: inherit; }
   color: var(--red);
 }
 .btn-empty:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-assign {
+  padding: 13px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--amber), var(--gold));
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(217,119,6,.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn-assign:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(217,119,6,.4); }
+.btn-assign:active { transform: translateY(0); }
 
 /* ── Footer ── */
 .site-footer {
@@ -456,6 +439,7 @@ button { font-family: inherit; }
   font-size: 26px;
 }
 .modal-icon--warn { background: #fffbeb; }
+.modal-icon--charity { background: #fff7ed; }
 .modal-icon--success {
   background: linear-gradient(135deg, var(--green), #4ade80);
   color: white;
@@ -465,6 +449,24 @@ button { font-family: inherit; }
 
 .modal-panel h2 { font-size: 20px; font-weight: 800; color: var(--gray-800); }
 .modal-panel p { font-size: 14px; color: var(--gray-600); line-height: 1.6; }
+
+.charity-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--gray-200);
+  font-size: 15px;
+  font-family: inherit;
+  text-align: right;
+  direction: rtl;
+  color: var(--gray-800);
+  background: var(--gray-50);
+}
+.charity-input:focus {
+  outline: none;
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px rgba(217,119,6,.15);
+}
 
 .modal-actions {
   display: flex;
@@ -500,8 +502,9 @@ button { font-family: inherit; }
 /* ── Mobile ── */
 @media (max-width: 420px) {
   .charity-card { padding: 26px 18px 22px; }
-  .total-amount { font-size: 38px; }
-  .coin-row { gap: 12px; }
+  .coin-grid { gap: 16px 20px; }
+  .stat-box { font-size: 20px; }
+  .stat-box--accent { font-size: 26px; }
   .coin--10ag .coin-face { width: 46px; height: 46px; }
   .coin--1nis .coin-face { width: 51px; height: 51px; }
   .coin--half .coin-face { width: 58px; height: 58px; }

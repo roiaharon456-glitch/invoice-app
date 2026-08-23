@@ -1,14 +1,18 @@
 (() => {
-  const STORAGE_KEY = 'charityBox:totalAgorot';
+  const KEY_TOTAL = 'charityBox:totalAgorot';
+  const KEY_DAILY = 'charityBox:dailyAgorot';
+  const KEY_DAILY_DATE = 'charityBox:dailyDate';
+  const KEY_CHARITY = 'charityBox:charityName';
 
   const els = {
+    dailyAmount: document.getElementById('daily-amount'),
     totalAmount: document.getElementById('total-amount'),
-    modeSingle: document.getElementById('mode-single'),
-    modeDouble: document.getElementById('mode-double'),
-    hintText: document.getElementById('hint-text'),
-    coinRow: document.getElementById('coin-row'),
     coins: Array.from(document.querySelectorAll('.coin')),
     emptyBtn: document.getElementById('empty-btn'),
+    assignBtn: document.getElementById('assign-btn'),
+    charityLine: document.getElementById('charity-line'),
+    charityNameDisplay: document.getElementById('charity-name-display'),
+
     modalOverlay: document.getElementById('modal-overlay'),
     modalClose: document.getElementById('modal-close'),
     panelConfirm: document.getElementById('panel-confirm'),
@@ -18,30 +22,57 @@
     cancelEmptyBtn: document.getElementById('cancel-empty-btn'),
     confirmEmptyBtn: document.getElementById('confirm-empty-btn'),
     doneBtn: document.getElementById('done-btn'),
+
+    charityModalOverlay: document.getElementById('charity-modal-overlay'),
+    charityModalClose: document.getElementById('charity-modal-close'),
+    charityNameInput: document.getElementById('charity-name-input'),
+    charityCancelBtn: document.getElementById('charity-cancel-btn'),
+    charitySaveBtn: document.getElementById('charity-save-btn'),
   };
 
   let storageAvailable = true;
-  let mode = 'single';
-  let firstSelection = null; // coin <button> element
-  let totalAgorot = loadTotal();
+  let totalAgorot = 0;
+  let dailyAgorot = 0;
+  let charityName = '';
 
-  function loadTotal() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const n = parseInt(raw, 10);
-      return Number.isFinite(n) && n >= 0 ? n : 0;
-    } catch (e) {
-      storageAvailable = false;
-      return 0;
-    }
+  function todayStr() {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
 
-  function saveTotal() {
+  function safeGet(key) {
+    try { return localStorage.getItem(key); } catch (e) { storageAvailable = false; return null; }
+  }
+  function safeSet(key, value) {
     if (!storageAvailable) return;
-    try {
-      localStorage.setItem(STORAGE_KEY, String(totalAgorot));
-    } catch (e) {
-      storageAvailable = false;
+    try { localStorage.setItem(key, value); } catch (e) { storageAvailable = false; }
+  }
+
+  function loadState() {
+    const rawTotal = parseInt(safeGet(KEY_TOTAL), 10);
+    totalAgorot = Number.isFinite(rawTotal) && rawTotal >= 0 ? rawTotal : 0;
+
+    const storedDate = safeGet(KEY_DAILY_DATE);
+    const rawDaily = parseInt(safeGet(KEY_DAILY), 10);
+    const validDaily = Number.isFinite(rawDaily) && rawDaily >= 0 ? rawDaily : 0;
+    if (storedDate === todayStr()) {
+      dailyAgorot = validDaily;
+    } else {
+      dailyAgorot = 0;
+      safeSet(KEY_DAILY_DATE, todayStr());
+      safeSet(KEY_DAILY, '0');
+    }
+
+    charityName = safeGet(KEY_CHARITY) || '';
+  }
+
+  function rolloverDailyIfNeeded() {
+    const today = todayStr();
+    if (safeGet(KEY_DAILY_DATE) !== today) {
+      dailyAgorot = 0;
+      safeSet(KEY_DAILY_DATE, today);
+      safeSet(KEY_DAILY, '0');
+      renderTotals();
     }
   }
 
@@ -50,38 +81,25 @@
     return '₪' + shekels.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
-  function renderTotal() {
+  function renderTotals() {
+    els.dailyAmount.textContent = formatAgorot(dailyAgorot);
     els.totalAmount.textContent = formatAgorot(totalAgorot);
     els.emptyBtn.disabled = totalAgorot === 0;
   }
 
-  function bumpTotal() {
-    els.totalAmount.classList.remove('bump');
-    void els.totalAmount.offsetWidth;
-    els.totalAmount.classList.add('bump');
+  function bump(el) {
+    el.classList.remove('bump');
+    void el.offsetWidth;
+    el.classList.add('bump');
   }
 
-  function renderHint() {
-    if (mode !== 'double') {
-      els.hintText.textContent = '';
-      return;
+  function renderCharity() {
+    if (charityName) {
+      els.charityNameDisplay.textContent = charityName;
+      els.charityLine.hidden = false;
+    } else {
+      els.charityLine.hidden = true;
     }
-    els.hintText.textContent = firstSelection ? 'בחר מטבע שני' : 'בחר מטבע ראשון';
-  }
-
-  function clearSelection() {
-    if (firstSelection) {
-      firstSelection.classList.remove('selected');
-      firstSelection = null;
-    }
-    renderHint();
-  }
-
-  function setMode(newMode) {
-    mode = newMode;
-    els.modeSingle.classList.toggle('active', mode === 'single');
-    els.modeDouble.classList.toggle('active', mode === 'double');
-    clearSelection();
   }
 
   function playDrop(coinEl) {
@@ -98,64 +116,37 @@
     label.addEventListener('animationend', () => label.remove());
   }
 
-  function deposit(agorotList, coinEls) {
-    const sum = agorotList.reduce((a, b) => a + b, 0);
-    totalAgorot += sum;
-    saveTotal();
-    renderTotal();
-    bumpTotal();
-    coinEls.forEach((coinEl, i) => {
-      playDrop(coinEl);
-      floatFeedback(coinEl, agorotList[i]);
-    });
-  }
-
   function handleCoinTap(coinEl) {
+    rolloverDailyIfNeeded();
     const value = parseInt(coinEl.dataset.value, 10);
 
-    if (mode === 'single') {
-      deposit([value], [coinEl]);
-      return;
-    }
+    dailyAgorot += value;
+    totalAgorot += value;
+    safeSet(KEY_DAILY, String(dailyAgorot));
+    safeSet(KEY_TOTAL, String(totalAgorot));
 
-    // double mode
-    if (!firstSelection) {
-      firstSelection = coinEl;
-      coinEl.classList.add('selected');
-      renderHint();
-      return;
-    }
-
-    if (firstSelection === coinEl) {
-      clearSelection();
-      return;
-    }
-
-    const firstValue = parseInt(firstSelection.dataset.value, 10);
-    const firstEl = firstSelection;
-    firstSelection.classList.remove('selected');
-    firstSelection = null;
-    deposit([firstValue, value], [firstEl, coinEl]);
-    renderHint();
+    renderTotals();
+    bump(els.dailyAmount);
+    bump(els.totalAmount);
+    playDrop(coinEl);
+    floatFeedback(coinEl, value);
   }
 
-  function openModal() {
-    els.confirmText.textContent = `בקופה כרגע ${formatAgorot(totalAgorot)}. הפעולה תאפס את הסכום לחלוטין.`;
+  function openEmptyModal() {
+    els.confirmText.textContent = `בקופה כרגע ${formatAgorot(totalAgorot)}. הפעולה תאפס את הסכום שהצטבר (הסכום היומי לא יושפע).`;
     showPanel(els.panelConfirm);
     els.modalOverlay.hidden = false;
     els.confirmEmptyBtn.focus();
-    document.addEventListener('keydown', onModalKeydown);
+    document.addEventListener('keydown', onEmptyModalKeydown);
   }
 
-  function closeModal() {
+  function closeEmptyModal() {
     els.modalOverlay.hidden = true;
-    document.removeEventListener('keydown', onModalKeydown);
+    document.removeEventListener('keydown', onEmptyModalKeydown);
     els.emptyBtn.focus();
   }
 
-  function onModalKeydown(e) {
-    if (e.key === 'Escape') closeModal();
-  }
+  function onEmptyModalKeydown(e) { if (e.key === 'Escape') closeEmptyModal(); }
 
   function showPanel(panel) {
     els.panelConfirm.classList.toggle('active', panel === els.panelConfirm);
@@ -164,30 +155,56 @@
 
   function performEmpty() {
     const preClear = totalAgorot;
-    clearSelection();
     totalAgorot = 0;
-    saveTotal();
-    renderTotal();
+    safeSet(KEY_TOTAL, '0');
+    renderTotals();
     els.resultTitle.textContent = `תרמת ${formatAgorot(preClear)}!`;
     showPanel(els.panelResult);
   }
 
-  els.modeSingle.addEventListener('click', () => setMode('single'));
-  els.modeDouble.addEventListener('click', () => setMode('double'));
+  function openCharityModal() {
+    els.charityNameInput.value = charityName;
+    els.charityModalOverlay.hidden = false;
+    els.charityNameInput.focus();
+    document.addEventListener('keydown', onCharityModalKeydown);
+  }
 
-  els.coins.forEach((coinEl) => {
-    coinEl.addEventListener('click', () => handleCoinTap(coinEl));
-  });
+  function closeCharityModal() {
+    els.charityModalOverlay.hidden = true;
+    document.removeEventListener('keydown', onCharityModalKeydown);
+    els.assignBtn.focus();
+  }
 
-  els.emptyBtn.addEventListener('click', openModal);
-  els.modalClose.addEventListener('click', closeModal);
-  els.cancelEmptyBtn.addEventListener('click', closeModal);
+  function onCharityModalKeydown(e) { if (e.key === 'Escape') closeCharityModal(); }
+
+  function saveCharity() {
+    charityName = els.charityNameInput.value.trim();
+    safeSet(KEY_CHARITY, charityName);
+    renderCharity();
+    closeCharityModal();
+  }
+
+  els.coins.forEach((coinEl) => coinEl.addEventListener('click', () => handleCoinTap(coinEl)));
+
+  els.emptyBtn.addEventListener('click', openEmptyModal);
+  els.modalClose.addEventListener('click', closeEmptyModal);
+  els.cancelEmptyBtn.addEventListener('click', closeEmptyModal);
   els.confirmEmptyBtn.addEventListener('click', performEmpty);
-  els.doneBtn.addEventListener('click', closeModal);
-  els.modalOverlay.addEventListener('click', (e) => {
-    if (e.target === els.modalOverlay) closeModal();
+  els.doneBtn.addEventListener('click', closeEmptyModal);
+  els.modalOverlay.addEventListener('click', (e) => { if (e.target === els.modalOverlay) closeEmptyModal(); });
+
+  els.assignBtn.addEventListener('click', openCharityModal);
+  els.charityModalClose.addEventListener('click', closeCharityModal);
+  els.charityCancelBtn.addEventListener('click', closeCharityModal);
+  els.charitySaveBtn.addEventListener('click', saveCharity);
+  els.charityNameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') saveCharity(); });
+  els.charityModalOverlay.addEventListener('click', (e) => { if (e.target === els.charityModalOverlay) closeCharityModal(); });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') rolloverDailyIfNeeded();
   });
 
-  renderTotal();
-  renderHint();
+  loadState();
+  renderTotals();
+  renderCharity();
 })();
