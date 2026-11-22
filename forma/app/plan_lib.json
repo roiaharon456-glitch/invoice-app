@@ -1,0 +1,593 @@
+{
+ "lib": {
+  "gym": {
+   "squat": {
+    "name": "סקוואט עם מוט",
+    "sets": 3,
+    "min": 6,
+    "max": 10,
+    "rest": 150,
+    "inc": 2.5,
+    "unit": "kg"
+   },
+   "hinge": {
+    "name": "דדליפט רומני",
+    "sets": 3,
+    "min": 8,
+    "max": 12,
+    "rest": 120,
+    "inc": 2.5,
+    "unit": "kg"
+   },
+   "hpush": {
+    "name": "לחיצת חזה במוט",
+    "sets": 3,
+    "min": 6,
+    "max": 10,
+    "rest": 150,
+    "inc": 2.5,
+    "unit": "kg"
+   },
+   "incline": {
+    "name": "לחיצת חזה בשיפוע עם משקולות",
+    "sets": 3,
+    "min": 8,
+    "max": 12,
+    "rest": 90,
+    "inc": 2,
+    "unit": "kg"
+   },
+   "vpush": {
+    "name": "לחיצת כתפיים עם משקולות",
+    "sets": 3,
+    "min": 8,
+    "max": 12,
+    "rest": 90,
+    "inc": 2,
+    "unit": "kg"
+   },
+   "hpull": {
+    "name": "חתירה בכבל בישיבה",
+    "sets": 3,
+    "min": 8,
+    "max": 12,
+    "rest": 90,
+    "inc": 2.5,
+    "unit": "kg"
+   },
+   "vpull": {
+    "name": "פולי עליון",
+    "sets": 3,
+    "min": 8,
+    "max": 12,
+    "rest": 90,
+    "inc": 2.5,
+    "unit": "kg"
+   },
+   "lunge": {
+    "name": "לאנג׳ים בהליכה עם משקולות",
+    "sets": 3,
+    "min": 10,
+    "max": 12,
+    "rest": 90,
+    "inc": 2,
+    "unit": "kg"
+   },
+   "legpress": {
+    "name": "לחיצת רגליים",
+    "sets": 3,
+    "min": 10,
+    "max": 15,
+    "rest": 120,
+    "inc": 5,
+    "unit": "kg"
+   },
+   "legcurl": {
+    "name": "כפיפת ברכיים במכונה",
+    "sets": 3,
+    "min": 10,
+    "max": 15,
+    "rest": 75,
+    "inc": 2.5,
+    "unit": "kg"
+   },
+   "lat": {
+    "name": "הרחקה לצדדים",
+    "sets": 3,
+    "min": 12,
+    "max": 20,
+    "rest": 60,
+    "inc": 1,
+    "unit": "kg"
+   },
+   "rear": {
+    "name": "פייס-פול בכבל",
+    "sets": 3,
+    "min": 12,
+    "max": 20,
+    "rest": 60,
+    "inc": 2.5,
+    "unit": "kg"
+   },
+   "bi": {
+    "name": "כפיפת מרפקים עם משקולות",
+    "sets": 3,
+    "min": 10,
+    "max": 15,
+    "rest": 60,
+    "inc": 1,
+    "unit": "kg"
+   },
+   "tri": {
+    "name": "פשיטת מרפקים בכבל",
+    "sets": 3,
+    "min": 10,
+    "max": 15,
+    "rest": 60,
+    "inc": 2.5,
+    "unit": "kg"
+   },
+   "calf": {
+    "name": "הרמות עקבים בעמידה",
+    "sets": 3,
+    "min": 12,
+    "max": 20,
+    "rest": 60,
+    "inc": 2.5,
+    "unit": "kg"
+   },
+   "core": {
+    "name": "פלאנק",
+    "sets": 3,
+    "min": 30,
+    "max": 60,
+    "rest": 60,
+    "inc": 0,
+    "unit": "sec"
+   }
+  },
+  "dumbbells": {
+   "squat": {
+    "name": "גובלט סקוואט",
+    "sets": 3,
+    "min": 8,
+    "max": 15,
+    "rest": 90,
+    "inc": 2,
+    "unit": "kg"
+   },
+   "hinge": {
+    "name": "דדליפט רומני עם משקולות",
+    "sets": 3,
+    "min": 8,
+    "max": 12,
+    "rest": 90,
+    "inc": 2,
+    "unit": "kg"
+   },
+   "hpush": {
+    "name": "לחיצת חזה עם משקולות",
+    "sets": 3,
+    "min": 8,
+    "max": 12,
+    "rest": 90,
+    "inc": 2,
+    "unit": "kg"
+   },
+   "incline": {
+    "name": "לחיצת חזה בשיפוע עם משקולות",
+    "sets": 3,
+    "min": 8,
+    "max": 12,
+    "rest": 90,
+    "inc": 2,
+    "unit": "kg"
+   },
+   "vpush": {
+    "name": "לחיצת כתפיים עם משקולות",
+    "sets": 3,
+    "min": 8,
+    "max": 12,
+    "rest": 90,
+    "inc": 1,
+    "unit": "kg"
+   },
+   "hpull": {
+    "name": "חתירה בהטיה עם משקולת",
+    "sets": 3,
+    "min": 8,
+    "max": 12,
+    "rest": 75,
+    "inc": 2,
+    "unit": "kg"
+   },
+   "vpull": {
+    "name": "פול-אובר עם משקולת",
+    "sets": 3,
+    "min": 10,
+    "max": 15,
+    "rest": 75,
+    "inc": 1,
+    "unit": "kg"
+   },
+   "lunge": {
+    "name": "סקוואט בולגרי",
+    "sets": 3,
+    "min": 8,
+    "max": 12,
+    "rest": 90,
+    "inc": 1,
+    "unit": "kg"
+   },
+   "legpress": {
+    "name": "היפ-ת׳ראסט עם משקולת",
+    "sets": 3,
+    "min": 10,
+    "max": 15,
+    "rest": 90,
+    "inc": 2,
+    "unit": "kg"
+   },
+   "legcurl": {
+    "name": "דדליפט על רגל אחת",
+    "sets": 3,
+    "min": 8,
+    "max": 12,
+    "rest": 75,
+    "inc": 1,
+    "unit": "kg"
+   },
+   "lat": {
+    "name": "הרחקה לצדדים",
+    "sets": 3,
+    "min": 12,
+    "max": 20,
+    "rest": 60,
+    "inc": 1,
+    "unit": "kg"
+   },
+   "rear": {
+    "name": "פרפר אחורי בהטיה",
+    "sets": 3,
+    "min": 12,
+    "max": 20,
+    "rest": 60,
+    "inc": 1,
+    "unit": "kg"
+   },
+   "bi": {
+    "name": "כפיפת פטישים",
+    "sets": 3,
+    "min": 10,
+    "max": 15,
+    "rest": 60,
+    "inc": 1,
+    "unit": "kg"
+   },
+   "tri": {
+    "name": "פשיטת מרפקים מעל הראש",
+    "sets": 3,
+    "min": 10,
+    "max": 15,
+    "rest": 60,
+    "inc": 1,
+    "unit": "kg"
+   },
+   "calf": {
+    "name": "הרמות עקבים עם משקולות",
+    "sets": 3,
+    "min": 12,
+    "max": 20,
+    "rest": 60,
+    "inc": 2,
+    "unit": "kg"
+   },
+   "core": {
+    "name": "פלאנק",
+    "sets": 3,
+    "min": 30,
+    "max": 60,
+    "rest": 60,
+    "inc": 0,
+    "unit": "sec"
+   }
+  },
+  "bodyweight": {
+   "squat": {
+    "name": "סקוואט במשקל גוף",
+    "sets": 3,
+    "min": 15,
+    "max": 25,
+    "rest": 60,
+    "inc": 0,
+    "unit": "reps"
+   },
+   "hinge": {
+    "name": "גשר ישבן על רגל אחת",
+    "sets": 3,
+    "min": 10,
+    "max": 15,
+    "rest": 60,
+    "inc": 0,
+    "unit": "reps"
+   },
+   "hpush": {
+    "name": "שכיבות סמיכה",
+    "sets": 3,
+    "min": 8,
+    "max": 20,
+    "rest": 75,
+    "inc": 0,
+    "unit": "reps"
+   },
+   "incline": {
+    "name": "שכיבות סמיכה עם רגליים מוגבהות",
+    "sets": 3,
+    "min": 6,
+    "max": 15,
+    "rest": 75,
+    "inc": 0,
+    "unit": "reps"
+   },
+   "vpush": {
+    "name": "שכיבות סמיכה פייק",
+    "sets": 3,
+    "min": 6,
+    "max": 12,
+    "rest": 75,
+    "inc": 0,
+    "unit": "reps"
+   },
+   "hpull": {
+    "name": "חתירה הפוכה מתחת לשולחן",
+    "sets": 3,
+    "min": 8,
+    "max": 15,
+    "rest": 75,
+    "inc": 0,
+    "unit": "reps"
+   },
+   "vpull": {
+    "name": "מתח (או מתח שלילי)",
+    "sets": 3,
+    "min": 3,
+    "max": 10,
+    "rest": 120,
+    "inc": 0,
+    "unit": "reps"
+   },
+   "lunge": {
+    "name": "סקוואט בולגרי",
+    "sets": 3,
+    "min": 8,
+    "max": 15,
+    "rest": 75,
+    "inc": 0,
+    "unit": "reps"
+   },
+   "legpress": {
+    "name": "סקוואט קפיצה",
+    "sets": 3,
+    "min": 10,
+    "max": 15,
+    "rest": 75,
+    "inc": 0,
+    "unit": "reps"
+   },
+   "legcurl": {
+    "name": "גשר ישבן עם כפיפת ברכיים על מגבת",
+    "sets": 3,
+    "min": 8,
+    "max": 15,
+    "rest": 60,
+    "inc": 0,
+    "unit": "reps"
+   },
+   "lat": {
+    "name": "Y-T-W בשכיבה על הבטן",
+    "sets": 3,
+    "min": 8,
+    "max": 12,
+    "rest": 45,
+    "inc": 0,
+    "unit": "reps"
+   },
+   "rear": {
+    "name": "מתיחת מגבת לאחור",
+    "sets": 3,
+    "min": 20,
+    "max": 40,
+    "rest": 45,
+    "inc": 0,
+    "unit": "sec"
+   },
+   "bi": {
+    "name": "כפיפת מרפקים עם תיק כבד",
+    "sets": 3,
+    "min": 10,
+    "max": 15,
+    "rest": 45,
+    "inc": 0,
+    "unit": "reps"
+   },
+   "tri": {
+    "name": "דיפס על כיסא",
+    "sets": 3,
+    "min": 8,
+    "max": 15,
+    "rest": 60,
+    "inc": 0,
+    "unit": "reps"
+   },
+   "calf": {
+    "name": "הרמות עקבים על רגל אחת",
+    "sets": 3,
+    "min": 12,
+    "max": 20,
+    "rest": 45,
+    "inc": 0,
+    "unit": "reps"
+   },
+   "core": {
+    "name": "פלאנק",
+    "sets": 3,
+    "min": 30,
+    "max": 60,
+    "rest": 60,
+    "inc": 0,
+    "unit": "sec"
+   }
+  }
+ },
+ "templates": {
+  "FA": {
+   "name": "גוף מלא A",
+   "focus": "רגליים · חזה · גב",
+   "pats": [
+    "squat",
+    "hpush",
+    "hpull",
+    "lat",
+    "core"
+   ]
+  },
+  "FB": {
+   "name": "גוף מלא B",
+   "focus": "ירך אחורית · כתפיים · גב",
+   "pats": [
+    "hinge",
+    "vpush",
+    "vpull",
+    "lunge",
+    "bi",
+    "tri"
+   ]
+  },
+  "FC": {
+   "name": "גוף מלא C",
+   "focus": "רגליים · חזה עליון · גב",
+   "pats": [
+    "legpress",
+    "incline",
+    "hpull",
+    "rear",
+    "calf",
+    "core"
+   ]
+  },
+  "UA": {
+   "name": "פלג עליון A",
+   "focus": "חזה · גב · כתפיים",
+   "pats": [
+    "hpush",
+    "hpull",
+    "vpush",
+    "vpull",
+    "lat",
+    "tri"
+   ]
+  },
+  "LA": {
+   "name": "פלג תחתון A",
+   "focus": "ארבע ראשי · ישבן",
+   "pats": [
+    "squat",
+    "legcurl",
+    "lunge",
+    "calf",
+    "core"
+   ]
+  },
+  "UB": {
+   "name": "פלג עליון B",
+   "focus": "גב · חזה עליון · ידיים",
+   "pats": [
+    "incline",
+    "vpull",
+    "hpull",
+    "lat",
+    "rear",
+    "bi"
+   ]
+  },
+  "LB": {
+   "name": "פלג תחתון B",
+   "focus": "ירך אחורית · ישבן",
+   "pats": [
+    "hinge",
+    "legpress",
+    "legcurl",
+    "calf",
+    "core"
+   ]
+  },
+  "PU": {
+   "name": "דחיפה",
+   "focus": "חזה · כתפיים · יד אחורית",
+   "pats": [
+    "hpush",
+    "incline",
+    "vpush",
+    "lat",
+    "tri"
+   ]
+  },
+  "PL": {
+   "name": "משיכה",
+   "focus": "גב · יד קדמית",
+   "pats": [
+    "vpull",
+    "hpull",
+    "rear",
+    "bi",
+    "core"
+   ]
+  },
+  "LG": {
+   "name": "רגליים",
+   "focus": "רגליים מלא",
+   "pats": [
+    "squat",
+    "hinge",
+    "lunge",
+    "calf",
+    "core"
+   ]
+  }
+ },
+ "splits": {
+  "1": [
+   "FA"
+  ],
+  "2": [
+   "FA",
+   "FB"
+  ],
+  "3": [
+   "FA",
+   "FB",
+   "FC"
+  ],
+  "4": [
+   "UA",
+   "LA",
+   "UB",
+   "LB"
+  ],
+  "5": [
+   "UA",
+   "LA",
+   "PU",
+   "PL",
+   "LG"
+  ],
+  "6": [
+   "PU",
+   "PL",
+   "LG",
+   "UB",
+   "LB",
+   "PL"
+  ]
+ }
+}

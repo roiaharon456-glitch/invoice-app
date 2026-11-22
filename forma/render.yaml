@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: forma
+    runtime: python
+    plan: free
+    rootDir: forma
+    branch: claude/friendly-knuth-shf0e5
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: AGENT_MODEL
+        value: claude-opus-5-5
+      - key: AGENT_EFFORT
+        value: low
+      - key: TZ_NAME
+        value: Asia/Jerusalem
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: CRON_SECRET
+        generateValue: true
+      - key: WA_VERIFY_TOKEN
+        generateValue: true
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: WA_TOKEN
+        sync: false
+      - key: WA_PHONE_NUMBER_ID
+        sync: false
+      - key: WA_APP_SECRET
+        sync: false
+      - key: OWNER_PHONE
+        sync: false
+      - key: PUBLIC_URL
+        sync: false
